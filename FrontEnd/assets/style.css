@@ -55,6 +55,7 @@ body {
 }
 header {
 	display: flex;
+	flex-wrap: wrap;
 	justify-content: space-between;
 	margin: 50px 0
 }
@@ -102,9 +103,10 @@ nav span{
 li:hover {
 	color: #B1663C;
 }
-#introduction {
+.introduction {
 	display: flex;
 	align-items: center;
+	flex-wrap: wrap;
 }
 #introduction figure {
 	flex: 1
@@ -164,7 +166,7 @@ li:hover {
 	text-align: center;
 }
 
-#contact input, #login input {
+#contact input, #login input, #editionmode {
 	height: 50px;
 	font-size: 1.2em;
 	border: none;
@@ -190,7 +192,7 @@ input{
 }
 
 
-input[type="submit"]{
+.send, #connect{
 	margin : 2em auto ;
 }
 
@@ -225,3 +227,41 @@ footer nav ul {
 	bottom: 0;
 	width: 1140px;
 }
+
+.header{
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+	width: 100%;
+	height: 60px;
+	background-color: black;
+	color: white;
+	margin-bottom: 20px;
+}
+
+.editImg, .editArticle, .editPortfolio{
+	display: flex;
+	flex-direction: row;
+	width: 80px;
+	justify-content: space-between;
+	
+}
+
+.editImg{
+	margin-left: 50px;
+	margin-top: 10px;
+}
+
+.editArticle{
+	margin-bottom: 20px;
+}
+
+.edition{
+		color: black !important;
+		background-color: white !important;
+		width: fit-content !important;
+		padding: 10px;
+		margin: 10px;
+	}
+
