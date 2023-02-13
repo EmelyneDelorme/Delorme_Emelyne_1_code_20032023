@@ -10,19 +10,14 @@ async function fillProjets() {
 function createProject() {
   for (let project of projects) {
     // Récupération de la div gallery
-    const gallery = document.getElementsByClassName("gallery");
+    const gallery = document.getElementsByClassName(`gallery`);
     // Création d'une figure enfant de gallery
-    const newFigure = document.createElement("figure");
-    gallery[0].appendChild(newFigure);
-    // Création d'une image enfant de figure
-    const newImg = document.createElement("img");
-    newImg.src = project.imageUrl;
-    newImg.setAttribute("alt", project.title);
-    newFigure.appendChild(newImg);
-    // Création d'une figcaption enfant de figure
-    const newFigCaption = document.createElement("figcaption");
-    newFigCaption.innerHTML = project.title;
-    newFigure.appendChild(newFigCaption);
+    gallery[0].innerHTML += `
+    <figure> 
+      <img src="${project.imageUrl}" alt="${project.title}">
+      <figcaption>${project.title}</figcaption>
+    </figure>
+    `;
   }
 }
 async function defaultDisplay() {
