@@ -15,12 +15,13 @@ function send(event) {
     .then((res) => {
       if (res.ok === false) {
         alert("E-mail et/ou mot-de-passe incorrects");
-      } else if (res.ok === true) {
-        document.location.href = `http://127.0.0.1:5500/FrontEnd/index.html`;
-        res.json().then((data) => {
-          localStorage.setItem("token", data.token);
-        });
+        throw new Error("E-mail et/ou mot-de-passe incorrects");
       }
+      return res.json();
+    })
+    .then((data) => {
+      localStorage.setItem("token", data.token);
+      document.location.href = `http://127.0.0.1:5500/FrontEnd/index.html`;
     })
     .catch((error) => {
       console.log(error);
