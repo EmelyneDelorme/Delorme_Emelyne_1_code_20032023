@@ -14,8 +14,7 @@ function send(event) {
   })
     .then((res) => {
       if (res.ok === false) {
-        alert("Erreur dans l’identifiant ou le mot de passe");
-        throw new Error("E-mail et/ou mot-de-passe incorrects");
+        throw new Error("Erreur dans l’identifiant ou le mot de passe");
       }
       return res.json();
     })
@@ -24,6 +23,6 @@ function send(event) {
       document.location.href = `http://127.0.0.1:5500/FrontEnd/index.html`;
     })
     .catch((error) => {
-      console.log(error);
+      alert(error);
     });
 }

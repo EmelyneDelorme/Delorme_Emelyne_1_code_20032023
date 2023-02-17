@@ -205,7 +205,9 @@ function createGallery(projects) {
       },
     });
     console.log(res);
-    if (!res.ok) {
+    if (res.ok) {
+      alert(`Le projet ${this.id} a été supprimé`);
+    } else {
       alert(`Le projet ${this.id} n'a pas pu être supprimé`);
     }
   }
