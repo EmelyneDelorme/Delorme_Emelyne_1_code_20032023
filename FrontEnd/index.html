@@ -13,14 +13,17 @@
 </head>
 <body>
 	<aside id="modal1" class="modal" aria-hidden="true" role="dialog" aria-labelledby="titlemodal" style="display:none;">
-		<div class="modal-wrapper">
-			<button class="js-modal-close">Fermer la modale<a href=""><i class="fas fa-times"></i></i></a></button>
+		<div class="modal-wrapper js-modal-stop">
+			<button class="js-modal-close modal-close"><p>Fermer la modale</p><i class="fas fa-times"></i></button>
 			<h3 id="titlemodal">Galerie photo</h3>
-			<div class="modal-gallery">
+			<div id="modal-gallery">
 			</div>
-			<form action="#" method="post">
-				<input class="send" type="submit" value="Ajouter une photo">
-			</form>
+			<button class="add-img" type="button js-modal-close">
+    			Ajouter une photo
+			</button>
+			<button class="delete-gallery" type="button">
+    			Supprimer la galerie
+			</button>
 		</div>
 	</aside>
 

@@ -90,48 +90,130 @@ if (localStorage.token === undefined) {
 }
 
 let modal = null;
+const focusableSelector = "button";
+let focusables = [];
+let previouslyFocusedElement = null;
 
 const openModal = function (e) {
   e.preventDefault();
-  const target = document.getElementById("modal1");
-  target.style.display = "flex";
-  target.removeAttribute("aria-hidden");
-  target.setAttribute("aria-modal", "true");
-  modal = target;
+  modal = document.getElementById("modal1");
+  focusables = Array.from(modal.querySelectorAll(focusableSelector));
+  previouslyFocusedElement = document.querySelector(":focus");
+  modal.style.display = "flex";
+  focusables[0].focus();
+  modal.removeAttribute("aria-hidden");
+  modal.setAttribute("aria-modal", "true");
+  modal.addEventListener("click", closeModal);
   modal.querySelector(".js-modal-close").addEventListener("click", closeModal);
+  modal
+    .querySelector(".js-modal-stop")
+    .addEventListener("click", stopPropagation);
 };
 
 const closeModal = function (e) {
   if (modal === null) return;
+  if (previouslyFocusedElement !== null) previouslyFocusedElement.focus();
   e.preventDefault();
-  modal.style.display = "none";
+  window.setTimeout(function () {
+    modal.style.display = "none";
+    modal = null;
+  }, 500);
   modal.setAttribute("aria-hidden", "true");
   modal.removeAttribute("aria-modal");
+  modal.removeEventListener("click", closeModal);
   modal
     .querySelector(".js-modal-close")
     .removeEventListener("click", closeModal);
-  modal = null;
+  modal
+    .querySelector(".js-modal-stop")
+    .removeEventListener("click", stopPropagation);
+};
+
+const stopPropagation = function (e) {
+  e.stopPropagation();
 };
 
 document.querySelectorAll(".js-modal").forEach((a) => {
   a.addEventListener("click", openModal);
 });
 
+const focusInModal = function (e) {
+  e.preventDefault();
+  let index = focusables.findIndex((f) => f === modal.querySelector(":focus"));
+  if (e.shiftKey === true) {
+    index--;
+  } else {
+    index++;
+  }
+  if (index >= focusables.length) {
+    index = 0;
+  }
+  if (index < 0) {
+    index = focusables.length - 1;
+  }
+  focusables[index].focus();
+};
+
+window.addEventListener("keydown", function (e) {
+  if (e.key === "Escape" || e.key === "Esc") {
+    closeModal(e);
+  }
+  if (e.key === "Tab" && modal !== null) {
+    focusInModal(e);
+  }
+});
+
 function createGallery(projects) {
   for (let project of projects) {
-    // Récupération de la div gallery
-    const gallery = document.getElementsByClassName("gallery");
+    // Récupération de la div modal-gallery
+    const gallery = document.getElementById("modal-gallery");
     // Création d'une figure enfant de gallery
     const newFigure = document.createElement("figure");
-    gallery[0].appendChild(newFigure);
-    // Création d'une image enfant de figure
+    gallery.appendChild(newFigure);
+    // Création d'une div image enfant de figure
+    const newDiv = document.createElement("div");
+    newDiv.setAttribute("class", "modal-image");
+    newFigure.appendChild(newDiv);
+    //Création du bouton delete
+    const newButton = document.createElement("button");
+    newButton.setAttribute("type", "button");
+    newButton.setAttribute("class", "delete-img");
+    newButton.setAttribute("id", project.id);
+    newButton.innerHTML = `<i class="fas fa-trash-alt fa-xs"></i>`;
+    newDiv.appendChild(newButton);
+    //Creation de l'image
     const newImg = document.createElement("img");
     newImg.src = project.imageUrl;
     newImg.setAttribute("alt", project.title);
-    newFigure.appendChild(newImg);
+    newDiv.appendChild(newImg);
     // Création d'une figcaption enfant de figure
-    const newFigCaption = document.createElement("figcaption");
-    newFigCaption.innerHTML = project.title;
-    newFigure.appendChild(newFigCaption);
+    const newEditionButton = document.createElement("p");
+    newEditionButton.innerHTML = "éditer";
+    newFigure.appendChild(newEditionButton);
+  }
+
+  const deleteButtons = document.querySelectorAll(".delete-img");
+  for (let button of deleteButtons) {
+    button.addEventListener("click", deleteItem);
+  }
+  async function deleteItem() {
+    const token = localStorage.token;
+    const res = await fetch(`http://localhost:5678/api/works/${this.id}`, {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    console.log(res);
+    if (!res.ok) {
+      alert(`Le projet ${this.id} n'a pas pu être supprimé`);
+    }
   }
 }
+
+// const newButtonMove = document.createElement("button");
+// newButtonMove.setAttribute("type", "button");
+// newButtonMove.setAttribute("class", "move-img");
+// newButtonMove.innerHTML = `<i class="fas fa-arrows-alt fa-xs"></i>`;
+// document.getElementsByClassName("modal-image")[0].appendChild(newButtonMove);
+// }

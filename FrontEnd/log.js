@@ -14,7 +14,7 @@ function send(event) {
   })
     .then((res) => {
       if (res.ok === false) {
-        alert("E-mail et/ou mot-de-passe incorrects");
+        alert("Erreur dans l’identifiant ou le mot de passe");
         throw new Error("E-mail et/ou mot-de-passe incorrects");
       }
       return res.json();
