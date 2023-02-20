@@ -18,12 +18,30 @@
 			<h3 id="titlemodal">Galerie photo</h3>
 			<div id="modal-gallery">
 			</div>
-			<button class="add-img" type="button js-modal-close">
+			<button class="add-img post-img-btn" type="button js-modal-close">
     			Ajouter une photo
 			</button>
 			<button class="delete-gallery" type="button">
     			Supprimer la galerie
 			</button>
+		</div>
+		<div class="modal-wrapper js-modal-stop">
+			<button class="js-modal-close modal-back"><p>Précédent</p><i class="fas fa-arrow-left"></i></button>
+			<button class="js-modal-close modal-close"><p>Fermer la modale</p><i class="fas fa-times"></i></button>
+			<h3 id="titlemodal">Ajout photo</h3>
+				<form action="#" method="post" class="post-img-form">
+					<div class="div-add-img">
+						<i class="fa-regular fa-image fa-4x"></i>
+						<button class="post-img-btn">+ Ajouter photo</button>
+						<p>jpg, png : 4mo max</p>
+					</div>
+					<label for="title">Titre</label>
+					<input type="text" name="title" id="title">
+					<label for="categories">Catégorie</label>
+					<select name="categories" id="categories">
+					</select>
+					<input class="send post-img-btn" type="submit" value="Valider">
+				</form>
 		</div>
 	</aside>
 

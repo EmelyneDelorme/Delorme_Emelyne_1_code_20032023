@@ -76,7 +76,6 @@ async function sortProject(projects) {
       } else {
         createProject(projects);
       }
-      console.log(projects);
     });
   }
 }
