@@ -1,17 +1,18 @@
 "use strict";
 async function bootstrap() {
   const projects = await fillProjets();
+  sortButtons(projects);
   defaultDisplay(projects);
-  sortProject(projects);
+  // sortProject(projects);
   createGallery(projects);
+  createSelectCategory();
 }
-
 bootstrap();
 
 /* Fonction de récupération des données de l'API */
 async function fillProjets() {
   const data = await fetch("http://localhost:5678/api/works");
-  const projects = await data.json();
+  let projects = await data.json();
   return projects;
 }
 
@@ -37,41 +38,42 @@ async function defaultDisplay(projects) {
   btnSort[0].setAttribute("id", "default");
 }
 
-/* Création et insertion des bouttons de tri */
-const sort = ["Tous", "Objets", "Appartements", "Hôtels & Restaurants"];
-const portfolio = document.getElementById("portfolio");
-const buttons = document.createElement("div");
-buttons.setAttribute("class", "sort");
-portfolio.appendChild(buttons);
-const title = document.getElementsByTagName("h2");
-portfolio.prepend(buttons);
-portfolio.prepend(title[1]);
-for (let obj of sort) {
-  const btnSort = document.createElement("input");
-  btnSort.setAttribute("type", "button");
-  btnSort.setAttribute("class", "btnSort");
-  btnSort.setAttribute("value", obj);
-  buttons.appendChild(btnSort);
-}
-
-// Fonction de tri - filtre
-async function sortProject(projects) {
+/* Création et insertion des boutons de tri */
+async function sortButtons(projects) {
+  const categoriesToSort = [];
+  categoriesToSort.push("Tous");
+  for (let project of projects) {
+    categoriesToSort.push(project.category.name);
+  }
+  const sort = [...new Set(categoriesToSort)];
+  const portfolio = document.getElementById("portfolio");
+  const buttons = document.createElement("div");
+  buttons.setAttribute("class", "sort");
+  if (localStorage.token !== undefined) {
+    buttons.style.display = "none";
+  }
+  portfolio.appendChild(buttons);
+  const title = document.getElementsByTagName("h2");
+  portfolio.prepend(buttons);
+  portfolio.prepend(title[1]);
+  for (let obj of sort) {
+    const btnSort = document.createElement("input");
+    btnSort.setAttribute("type", "button");
+    btnSort.setAttribute("class", "btnSort");
+    btnSort.setAttribute("value", obj);
+    buttons.appendChild(btnSort);
+  }
+  // Fonction de tri - filtre
   const btnSort = document.getElementsByClassName("btnSort");
-  const categoryBtn = {
-    Objets: 1,
-    Appartements: 2,
-    "Hôtels & Restaurants": 3,
-  };
-
   for (let btn of btnSort) {
     btn.addEventListener("click", function () {
       btnSort[0].removeAttribute("id");
       document.getElementsByClassName("gallery")[0].replaceChildren();
       const btnValue = btn.value;
       const filterProject = projects.filter(
-        (project) => project.category.id === categoryBtn[btnValue]
+        (project) => project.category.name === btnValue
       );
-      if (categoryBtn[btnValue]) {
+      if (btnValue && btnValue !== "Tous") {
         createProject(filterProject);
       } else {
         createProject(projects);
@@ -80,7 +82,34 @@ async function sortProject(projects) {
   }
 }
 
+// async function sortProject(projects) {
+//   const btnSort = document.getElementsByClassName("btnSort");
+//   const categoryBtn = {
+//     Objets: 1,
+//     Appartements: 2,
+//     "Hôtels & Restaurants": 3,
+//   };
+
+//   for (let btn of btnSort) {
+//     btn.addEventListener("click", function () {
+//       btnSort[0].removeAttribute("id");
+//       document.getElementsByClassName("gallery")[0].replaceChildren();
+//       const btnValue = btn.value;
+//       const filterProject = projects.filter(
+//         (project) => project.category.id === categoryBtn[btnValue]
+//       );
+//       if (categoryBtn[btnValue]) {
+//         createProject(filterProject);
+//       } else {
+//         createProject(projects);
+//       }
+//     });
+//   }
+// }
+
 // Fonction de récupération du token
+
+//Affichage apres connexion
 const editionMode = document.getElementsByClassName("editionMode");
 if (localStorage.token === undefined) {
   for (let element of editionMode) {
@@ -88,11 +117,13 @@ if (localStorage.token === undefined) {
   }
 }
 
+//Gestion de l'affichage de la modale
 let modal = null;
 const focusableSelector = "button";
 let focusables = [];
 let previouslyFocusedElement = null;
 
+//Fonction d'apparition de la modale
 const openModal = function (e) {
   e.preventDefault();
   modal = document.getElementById("modal1");
@@ -103,12 +134,15 @@ const openModal = function (e) {
   modal.removeAttribute("aria-hidden");
   modal.setAttribute("aria-modal", "true");
   modal.addEventListener("click", closeModal);
-  modal.querySelector(".js-modal-close").addEventListener("click", closeModal);
+  modal.querySelectorAll(".js-modal-close").forEach((a) => {
+    a.addEventListener("click", closeModal);
+  });
   modal
     .querySelector(".js-modal-stop")
     .addEventListener("click", stopPropagation);
 };
 
+//fonction de disparition de la modale
 const closeModal = function (e) {
   if (modal === null) return;
   if (previouslyFocusedElement !== null) previouslyFocusedElement.focus();
@@ -128,14 +162,17 @@ const closeModal = function (e) {
     .removeEventListener("click", stopPropagation);
 };
 
+//Ne pas fermer la modale au click dans la modale
 const stopPropagation = function (e) {
   e.stopPropagation();
 };
 
+//Au click du bouton=ouvrir la modale
 document.querySelectorAll(".js-modal").forEach((a) => {
   a.addEventListener("click", openModal);
 });
 
+//Fonction pour garder le focus dans la modale ()
 const focusInModal = function (e) {
   e.preventDefault();
   let index = focusables.findIndex((f) => f === modal.querySelector(":focus"));
@@ -153,6 +190,7 @@ const focusInModal = function (e) {
   focusables[index].focus();
 };
 
+//Fonction pour focus dans la modale ou fermer la modale avec le clavier (accessibilité lecteurs d'ecran)
 window.addEventListener("keydown", function (e) {
   if (e.key === "Escape" || e.key === "Esc") {
     closeModal(e);
@@ -162,6 +200,7 @@ window.addEventListener("keydown", function (e) {
   }
 });
 
+//Fonction de l'affichage des projets dans la modale
 function createGallery(projects) {
   for (let project of projects) {
     // Récupération de la div modal-gallery
@@ -191,6 +230,7 @@ function createGallery(projects) {
     newFigure.appendChild(newEditionButton);
   }
 
+  //Fonction de suppression de projet
   const deleteButtons = document.querySelectorAll(".delete-img");
   for (let button of deleteButtons) {
     button.addEventListener("click", deleteItem);
@@ -203,7 +243,6 @@ function createGallery(projects) {
         Authorization: `Bearer ${token}`,
       },
     });
-    console.log(res);
     if (res.ok) {
       alert(`Le projet ${this.id} a été supprimé`);
     } else {
@@ -218,3 +257,41 @@ function createGallery(projects) {
 // newButtonMove.innerHTML = `<i class="fas fa-arrows-alt fa-xs"></i>`;
 // document.getElementsByClassName("modal-image")[0].appendChild(newButtonMove);
 // }
+const firstModal = document.getElementById("modalDeleteImg");
+const secondModal = document.getElementById("modalAddImg");
+const changeModal = function () {
+  firstModal.style.display = "none";
+  secondModal.style.display = "flex";
+};
+
+const backModal = function () {
+  firstModal.style.display = "flex";
+  secondModal.style.display = "none";
+};
+document.querySelector("#post-img-btn").addEventListener("click", changeModal);
+document.querySelector("#modal-back").addEventListener("click", backModal);
+
+function createSelectCategory() {
+  const selectCategory = document.getElementById("categories");
+  const btnSort = Array.from(document.getElementsByClassName("btnSort"));
+  btnSort.shift();
+  for (let btn of btnSort) {
+    const option = document.createElement("option");
+    option.setAttribute("value", btn.value);
+    option.innerHTML = btn.value;
+    selectCategory.appendChild(option);
+  }
+}
+
+const fileInput = document.querySelector('input[type="file"]');
+
+// Create a new File object
+const myFile = new File(["Hello World!"], "+ Ajouter photo", {
+  type: "text/plain",
+  lastModified: new Date(),
+});
+
+// Now let's create a DataTransfer to get a FileList
+const dataTransfer = new DataTransfer();
+dataTransfer.items.add(myFile);
+fileInput.files = dataTransfer.files;
