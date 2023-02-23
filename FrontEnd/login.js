@@ -1,8 +1,8 @@
-function send(event) {
+function logIn(event) {
   event.preventDefault();
   const value = {
-    email: event.target.elements.email.value,
-    password: event.target.elements.password.value,
+    email: document.login.email.value,
+    password: document.login.password.value,
   };
   fetch("http://localhost:5678/api/users/login", {
     method: "POST",
@@ -26,3 +26,5 @@ function send(event) {
       alert(error);
     });
 }
+
+document.querySelector("#connect").addEventListener("click", logIn);

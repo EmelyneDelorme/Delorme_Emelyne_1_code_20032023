@@ -30,18 +30,19 @@
 				<button id="modal-back"><p>Précédent</p><i class="fas fa-arrow-left"></i></button>
 				<button class="js-modal-close modal-close"><p>Fermer la modale</p><i class="fas fa-times"></i></button>
 				<h3 id="titlemodal">Ajout photo</h3>
-					<form action="#" method="post" class="post-img-form">
+					<form action="#" method="post" name="newImg" id="post-img-form" class="post-img-form">
 						<div class="div-add-img">
 							<i class="fa-regular fa-image fa-4x"></i>
-							<input type="file" accept=".png, .jpg" class="post-img-btn">
+							<input name="image" type="file" accept=".png, .jpg" class="post-img-btn">
 							<p>jpg, png : 4mo max</p>
 						</div>
 						<label for="title">Titre</label>
 						<input type="text" name="title" id="title">
 						<label for="categories">Catégorie</label>
-						<select name="categories" id="categories">
+						<select name="category" id="categories">
+							<option value=""></option>
 						</select>
-						<input class="send post-img-btn" type="submit" value="Valider">
+						<input class="send post-img-btn" id="post-img" type="submit" value="Valider">
 					</form>
 			</div>
 		</div>
@@ -51,7 +52,7 @@
 	<div class="editionMode header">
 		<i class="far fa-edit"></i>
 		<p>Mode édition</p>
-		<input class="edition" type="submit" value="publier les changements">
+		<input id="edition-btn" class="edition" type="submit" value="publier les changements">
 	</div>
 	<div class="title">
 		<h1>Sophie Bluel <span>Architecte d'intérieur</span></h1>

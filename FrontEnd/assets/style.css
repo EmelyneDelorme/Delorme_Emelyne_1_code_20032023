@@ -279,7 +279,6 @@ li:hover {
 
 input,
 .add-img,
-select,
 .post-img-form button,
 .post-img-form input,
 .btnSort {
@@ -289,6 +288,16 @@ select,
   border-radius: 60px;
   height: 30px;
   border: none;
+}
+
+select,
+input#title {
+  font-family: "Work Sans";
+  height: 30px;
+  padding: 10px;
+  font-size: 13px;
+  font-weight: 100;
+  text-align: start;
 }
 
 .btnSort {
@@ -498,8 +507,8 @@ h3 {
   font-size: 10px;
 }
 
-.modal {
-  position: fixed;
+#modal1 {
+  position: absolute;
   display: flex;
   align-items: center;
   justify-content: center;

@@ -6,6 +6,7 @@ async function bootstrap() {
   // sortProject(projects);
   createGallery(projects);
   createSelectCategory();
+  console.log(projects);
 }
 bootstrap();
 
@@ -271,6 +272,12 @@ const backModal = function () {
 document.querySelector("#post-img-btn").addEventListener("click", changeModal);
 document.querySelector("#modal-back").addEventListener("click", backModal);
 
+const disconnect = function () {
+  localStorage.removeItem("token");
+  document.location.reload();
+};
+document.querySelector("#edition-btn").addEventListener("click", disconnect);
+
 function createSelectCategory() {
   const selectCategory = document.getElementById("categories");
   const btnSort = Array.from(document.getElementsByClassName("btnSort"));
@@ -283,15 +290,43 @@ function createSelectCategory() {
   }
 }
 
-const fileInput = document.querySelector('input[type="file"]');
+// const fileInput = document.querySelector('input[type="file"]');
 
-// Create a new File object
-const myFile = new File(["Hello World!"], "+ Ajouter photo", {
-  type: "text/plain",
-  lastModified: new Date(),
-});
+// // Create a new File object
+// const myFile = new File(["Hello World!"], "+ Ajouter photo", {
+//   type: "text/plain",
+//   lastModified: new Date(),
+// });
 
-// Now let's create a DataTransfer to get a FileList
-const dataTransfer = new DataTransfer();
-dataTransfer.items.add(myFile);
-fileInput.files = dataTransfer.files;
+// // Now let's create a DataTransfer to get a FileList
+// const dataTransfer = new DataTransfer();
+// dataTransfer.items.add(myFile);
+// fileInput.files = dataTransfer.files;
+
+function addProject(event) {
+  event.preventDefault();
+  const formData = new FormData();
+  console.log(document.newImg.image.files);
+  formData.append("title", document.newImg.title.value);
+  formData.append("image", document.newImg.image.files[0]);
+  formData.append("category", document.newImg.category.selectedIndex);
+  const token = localStorage.token;
+  console.log(formData);
+  fetch("http://localhost:5678/api/works", {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+    body: formData,
+  })
+    .then((res) => {
+      if (res.ok === false) {
+        throw new Error("La photo n'a pas pu être ajoutée");
+      }
+    })
+    .catch((error) => {
+      alert(error);
+    });
+}
+
+document.querySelector("#post-img").addEventListener("click", addProject);
