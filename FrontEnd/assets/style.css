@@ -228,6 +228,7 @@ li:hover {
 
 .gallery img {
   width: 100%;
+  height: 100%;
 }
 #contact,
 #login {
@@ -477,7 +478,6 @@ footer nav ul {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  justify-content: space-between;
   margin-bottom: 50px;
   border-bottom: 1px solid#B3B3B3;
   width: 400px;
@@ -486,6 +486,8 @@ footer nav ul {
 
 #modal-gallery img {
   width: 70px;
+  height: 90px;
+  object-fit: cover;
 }
 
 #modal-gallery figure {

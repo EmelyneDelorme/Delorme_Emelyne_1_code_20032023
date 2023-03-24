@@ -293,6 +293,8 @@ function addProject(event) {
       .then((res) => {
         if (res.ok === false) {
           throw new Error("La photo n'a pas pu être ajoutée")
+        } else {
+          alert("L'image a bien été ajoutée à la galerie")
         }
       })
       .catch((error) => {
