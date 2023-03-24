@@ -618,17 +618,22 @@ h3 {
   }
 }
 
-.div-add-img {
+.div-add-img,
+#div-img {
   background-color: #e8f1f7;
   border-radius: 3px;
   width: 420px;
   height: 169px;
+}
+.div-add-img {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
 }
-
+#div-img {
+  text-align: center;
+}
 .div-add-img p {
   font-size: x-small;
   margin: 5px;
@@ -642,6 +647,11 @@ h3 {
 .div-add-img i {
   color: #b9c5cc;
   margin: 20px;
+}
+
+#img-added {
+  height: 100%;
+  width: 130px;
 }
 
 .post-img-form {
@@ -660,8 +670,3 @@ h3 {
   justify-content: space-between;
   align-items: center;
 }
-
-/* .border{
-	height:5px;
-	border-bottom: black;
-} */

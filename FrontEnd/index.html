@@ -31,14 +31,16 @@
 				<button class="js-modal-close modal-close"><p>Fermer la modale</p><i class="fas fa-times"></i></button>
 				<h3 id="titlemodal">Ajout photo</h3>
 					<form action="#" method="post" name="newImg" id="post-img-form" class="post-img-form">
-						<div class="div-add-img">
-							<img class="icon" src="assets\icons\image.png">
-							<div class="input-file">
-								<p>+ Ajouter photo</p>
-								<input name="image" type="file" accept=".png, .jpg" id="file" class="form-validity post-img-btn">
-							</input>
+						<div id="div-img">
+							<div class="div-add-img">
+								<img class="icon" src="assets\icons\image.png">
+								<div class="input-file">
+									<p>+ Ajouter photo</p>
+									<input name="image" type="file" accept=".png, .jpg" id="file" class="form-validity post-img-btn">
+								</input>
+								</div>
+								<p>jpg, png : 4mo max</p>
 							</div>
-							<p>jpg, png : 4mo max</p>
 						</div>
 						<label for="title">Titre</label>
 						<input class="form-validity" type="text" name="title" id="title">

@@ -323,3 +323,18 @@ function checkValidity() {
 document.querySelectorAll(".form-validity").forEach((a) => {
   a.addEventListener("change", checkValidity)
 })
+
+function previewImg() {
+  if (document.newImg.image.files[0] !== undefined) {
+    const newImg = document.createElement("img")
+    const src = URL.createObjectURL(document.newImg.image.files[0])
+    newImg.src = src
+    newImg.setAttribute("id", "img-added")
+    document
+      .getElementById("div-img")
+      .insertBefore(newImg, document.getElementsByClassName("div-add-img")[0])
+    document.getElementsByClassName("div-add-img")[0].style.display = "none"
+  }
+}
+
+document.getElementById("file").addEventListener("change", previewImg)
