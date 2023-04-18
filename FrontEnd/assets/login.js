@@ -20,7 +20,8 @@ function logIn(event) {
     })
     .then((data) => {
       localStorage.setItem("token", data.token);
-      document.location.href = `http://127.0.0.1:5500/FrontEnd/index.html`;
+      const urlToChange = document.location.href.split("login");
+      document.location.href = urlToChange[0] + "index.html";
     })
     .catch((error) => {
       alert(error);
