@@ -18,7 +18,6 @@ async function fillProjets() {
 
 /* Fonction de création des projets à afficher */
 function createProject(projects) {
-  console.log("yooo");
   let figures = [];
   // Récupération de la div gallery
   const gallery = document.getElementsByClassName(`gallery`);
@@ -92,11 +91,20 @@ async function sortButtons(projects) {
 }
 
 //Affichage apres connexion
+const disconnect = function (e) {
+  e.preventDefault();
+  localStorage.removeItem("token");
+  document.location.reload();
+};
 const editionMode = document.getElementsByClassName("editionMode");
 if (localStorage.token === undefined) {
   for (let element of editionMode) {
     element.style.display = "none";
   }
+} else {
+  const textLog = document.getElementById("login");
+  textLog.replaceChildren("logout");
+  textLog.addEventListener("click", disconnect);
 }
 
 //Gestion de l'affichage de la modale
@@ -262,10 +270,6 @@ const backModal = function () {
 document.querySelector("#post-img-btn").addEventListener("click", changeModal);
 document.querySelector("#modal-back").addEventListener("click", backModal);
 
-const disconnect = function () {
-  localStorage.removeItem("token");
-  document.location.reload();
-};
 document.querySelector("#edition-btn").addEventListener("click", disconnect);
 
 function createSelectCategory() {
