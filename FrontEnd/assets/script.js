@@ -195,9 +195,10 @@ window.addEventListener("keydown", function (e) {
 
 //Fonction de l'affichage des projets dans la modale
 function createGallery(projects) {
+  let figures = [];
+  // Récupération de la div modal-gallery
+  const gallery = document.getElementById("modal-gallery");
   for (let project of projects) {
-    // Récupération de la div modal-gallery
-    const gallery = document.getElementById("modal-gallery");
     // Création d'une figure enfant de gallery
     const newFigure = document.createElement("figure");
     gallery.appendChild(newFigure);
@@ -228,7 +229,9 @@ function createGallery(projects) {
     document
       .getElementsByClassName("modal-image")[0]
       .appendChild(newButtonMove);
+    figures.push(newFigure);
   }
+  gallery.replaceChildren(...figures);
 
   //Fonction de suppression de projet
   const deleteButtons = document.querySelectorAll(".delete-img");
@@ -247,10 +250,9 @@ function createGallery(projects) {
       alert(`Le projet ${this.id} a été supprimé`);
       closeModal(e);
       fillProjets().then((projects) => {
-        console.log("projects", projects);
         createProject(projects);
+        createGallery(projects);
       });
-      // const gallery = document.getElementsByClassName(`gallery`);
     } else {
       alert(`Le projet ${this.id} n'a pas pu être supprimé`);
       closeModal(e);
@@ -313,8 +315,8 @@ function addProject(e) {
           alert("L'image a bien été ajoutée à la galerie");
           closeModal(e);
           fillProjets().then((projects) => {
-            console.log("projects", projects);
             createProject(projects);
+            createGallery(projects);
           });
         }
       })
